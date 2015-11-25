@@ -1,0 +1,8 @@
+*.vs
+*.opensdf
+*.sdf
+*.vcxproj.user
+/Debug
+/Release
+/Chameleon/Debug
+/Chameleon/Release
