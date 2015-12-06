@@ -2,11 +2,9 @@
 
 ### Description
 
-Chameleon is a bare minimum internal skin changer for Counter-Strike: Global Offensive. Only the absolute essential classes and methods are implemented.
+Chameleon is a bare minimum internal skin changer for Counter-Strike: Global Offensive.
 
-### Notes
-
-Original owner is _not_ checked, if you pick up someones weapon and a full update is performed, it will turn into the skin you have defined in `Skins.h` regardless of if it belongs to you or not.
+Only the absolute essential classes and methods are implemented.
 
 ### Usage
 
