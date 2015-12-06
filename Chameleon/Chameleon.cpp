@@ -13,13 +13,7 @@ typedef void(__thiscall *FrameStageNotify)(void*, ClientFrameStage_t);
 FrameStageNotify fnOriginalFunction = NULL;
 
 // Function to apply skin data to weapons.
-inline bool ApplyCustomSkin(DWORD hWeapon) {
-	// Get the weapon entity from the provided handle.
-	CBaseAttributableItem* pWeapon = (CBaseAttributableItem*)g_EntityList->GetClientEntityFromHandle(hWeapon);
-
-	if (!pWeapon)
-		return false;
-
+inline bool ApplyCustomSkin(CBaseAttributableItem* pWeapon) {
 	// Get the weapons item definition index.
 	int nWeaponIndex = *pWeapon->GetItemDefinitionIndex();
 
@@ -48,7 +42,8 @@ inline bool ApplyCustomSkin(DWORD hWeapon) {
 void __fastcall FrameStageNotifyThink(void* ecx, void* edx, ClientFrameStage_t Stage) {
 	while (Stage == FRAME_NET_UPDATE_POSTDATAUPDATE_START) {
 		// Get our player entity.
-		IClientEntity* pLocal = g_EntityList->GetClientEntity(g_EngineClient->GetLocalPlayer());
+		int nLocalPlayerID = g_EngineClient->GetLocalPlayer();
+		IClientEntity* pLocal = g_EntityList->GetClientEntity(nLocalPlayerID);
 
 		// Don't change anything if we're not alive.
 		if (!pLocal || pLocal->GetLifeState() != LIFE_ALIVE)
@@ -60,9 +55,26 @@ void __fastcall FrameStageNotifyThink(void* ecx, void* edx, ClientFrameStage_t S
 		if (!hWeapons)
 			break;
 
+		// Retrieve our player information which will be used for ownership checking.
+		player_info_t LocalPlayerInfo;
+		g_EngineClient->GetPlayerInfo(nLocalPlayerID, &LocalPlayerInfo);
+
 		// Loop through weapons and run our skin function on them.
 		for (int nIndex = 0; hWeapons[nIndex]; nIndex++) {
-			ApplyCustomSkin(hWeapons[nIndex]);
+			// Get the weapon entity from the provided handle.
+			CBaseAttributableItem* pWeapon = (CBaseAttributableItem*)g_EntityList->GetClientEntityFromHandle(hWeapons[nIndex]);
+
+			if (!pWeapon)
+				continue;
+
+			// Compare original owner XUIDs.
+			if (LocalPlayerInfo.m_nXuidLow != *pWeapon->GetOriginalOwnerXuidLow())
+				continue;
+
+			if (LocalPlayerInfo.m_nXuidHigh != *pWeapon->GetOriginalOwnerXuidHigh())
+				continue;
+
+			ApplyCustomSkin(pWeapon);
 		}
 
 		break;

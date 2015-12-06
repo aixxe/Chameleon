@@ -43,6 +43,16 @@ class CBaseAttributableItem: IClientEntity {
 			return (char*)((DWORD)this + 0x2D50 + 0x40 + 0x264);
 		}
 
+		inline int* GetOriginalOwnerXuidLow() {
+			// DT_BaseAttributableItem -> m_OriginalOwnerXuidLow: 0x3138
+			return (int*)((DWORD)this + 0x3138);
+		}
+
+		inline int* GetOriginalOwnerXuidHigh() {
+			// DT_BaseAttributableItem -> m_OriginalOwnerXuidHigh: 0x313C
+			return (int*)((DWORD)this + 0x313C);
+		}
+
 		inline int* GetFallbackPaintKit() {
 			// DT_BaseAttributableItem -> m_nFallbackPaintKit: 0x3140
 			return (int*)((DWORD)this + 0x3140);
