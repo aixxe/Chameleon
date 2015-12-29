@@ -79,10 +79,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ClientClass.h" />
+    <ClInclude Include="DataTable.h" />
     <ClInclude Include="Defines.h" />
+    <ClInclude Include="IBaseClientDLL.h" />
     <ClInclude Include="IClientEntity.h" />
     <ClInclude Include="IClientEntityList.h" />
     <ClInclude Include="IVEngineClient.h" />
+    <ClInclude Include="IVModelInfoClient.h" />
     <ClInclude Include="SDK.h" />
     <ClInclude Include="Skins.h" />
   </ItemGroup>

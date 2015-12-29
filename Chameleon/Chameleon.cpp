@@ -4,13 +4,31 @@
 // Include the user defined skins.
 #include "Skins.h"
 
-// Define global pointers to game classes.
-IVEngineClient* g_EngineClient = nullptr;
-IClientEntityList* g_EntityList = nullptr;
-
 // Define the calling convention for the FrameStageNotify function.
 typedef void(__thiscall *FrameStageNotify)(void*, ClientFrameStage_t);
 FrameStageNotify fnOriginalFunction = NULL;
+
+// Store the original proxy function for the 'm_nModelIndex' property.
+RecvVarProxyFn fnOriginalProxyFn = NULL;
+
+// Function to change viewmodels.
+void SetViewModelIndex(const CRecvProxyData *pDataConst, void *pStruct, void *pOut) {
+	// Ensure the model replacements are available. (called here so GetModelIndex returns valid IDs)
+	if (g_ViewModelCfg.size() == 0)
+		SetModelConfig();
+
+	// Make the incoming data editable.
+	CRecvProxyData* pData = const_cast<CRecvProxyData*>(pDataConst);
+
+	// Check for a model replacement in the global table.
+	if (g_ViewModelCfg.find(pData->m_Value.m_Int) != g_ViewModelCfg.end()) {
+		// Replace the view model with the user defined value.
+		pData->m_Value.m_Int = g_ViewModelCfg[pData->m_Value.m_Int];
+	}
+
+	// Call original function with the modified data.
+	fnOriginalProxyFn(pData, pStruct, pOut);
+}
 
 // Function to apply skin data to weapons.
 inline bool ApplyCustomSkin(CBaseAttributableItem* pWeapon) {
@@ -27,6 +45,9 @@ inline bool ApplyCustomSkin(CBaseAttributableItem* pWeapon) {
 	*pWeapon->GetFallbackSeed() = g_SkinChangerCfg[nWeaponIndex].nFallbackSeed;
 	*pWeapon->GetFallbackStatTrak() = g_SkinChangerCfg[nWeaponIndex].nFallbackStatTrak;
 	*pWeapon->GetFallbackWear() = g_SkinChangerCfg[nWeaponIndex].flFallbackWear;
+
+	if (g_SkinChangerCfg[nWeaponIndex].iItemDefinitionIndex)
+		*pWeapon->GetItemDefinitionIndex() = g_SkinChangerCfg[nWeaponIndex].iItemDefinitionIndex;
 
 	// If a name is defined, write it now.
 	if (g_SkinChangerCfg[nWeaponIndex].szCustomName) {
@@ -89,15 +110,14 @@ void Initialise() {
 	CreateInterfaceFn fnClientFactory = (CreateInterfaceFn)GetProcAddress(GetModuleHandleA("client.dll"), "CreateInterface");
 	CreateInterfaceFn fnEngineFactory = (CreateInterfaceFn)GetProcAddress(GetModuleHandleA("engine.dll"), "CreateInterface");
 	
-	// Call "CreateInterface" to get the IBaseClientDLL, IClientEntityList and IVEngineClient classes.
+	// Call "CreateInterface" to get the required class pointers.
+	g_BaseClient = (IBaseClientDLL*)fnClientFactory("VClient017", NULL); 
 	g_EntityList = (IClientEntityList*)fnClientFactory("VClientEntityList003", NULL);
 	g_EngineClient = (IVEngineClient*)fnEngineFactory("VEngineClient013", NULL);
-
-	// We don't implement IBaseClientDLL so we won't cast it.
-	void* pClientDLL = fnClientFactory("VClient017", NULL);
-
+	g_ModelInfo = (IVModelInfoClient*)fnEngineFactory("VModelInfoClient004", NULL);
+	
 	// Get the virtual method table for IBaseClientDLL.
-	PDWORD* pClientDLLVMT = (PDWORD*)pClientDLL;
+	PDWORD* pClientDLLVMT = (PDWORD*)g_BaseClient;
 
 	// Save the untouched table so we know where the original functions are.
 	PDWORD pOriginalClientDLLVMT = *pClientDLLVMT;
@@ -125,6 +145,31 @@ void Initialise() {
 
 	// Import skins to use.
 	SetSkinConfig();
+	
+	// Search for the 'CBaseViewModel' class.
+	for (ClientClass* pClass = g_BaseClient->GetAllClasses(); pClass; pClass = pClass->m_pNext) {
+		if (!strcmp(pClass->m_pNetworkName, "CBaseViewModel")) {
+			// Search for the 'm_nModelIndex' property.
+			RecvTable* pClassTable = pClass->m_pRecvTable;
+
+			for (int nIndex = 0; nIndex < pClassTable->m_nProps; nIndex++) {
+				RecvProp* pProp = &pClassTable->m_pProps[nIndex];
+
+				if (!pProp || strcmp(pProp->m_pVarName, "m_nModelIndex"))
+					continue;
+
+				// Store the original proxy function.
+				fnOriginalProxyFn = pProp->m_ProxyFn;
+
+				// Replace the proxy function with our model changer.
+				pProp->m_ProxyFn = (RecvVarProxyFn)SetViewModelIndex;
+
+				break;
+			}
+
+			break;
+		}
+	}
 }
 
 bool __stdcall DllMain(HINSTANCE hDLLInstance, DWORD dwReason, LPVOID lpReserved) {

@@ -3,6 +3,7 @@
 #include <unordered_map>
 
 struct EconomyItemCfg {
+	int iItemDefinitionIndex = 0;
 	int nFallbackPaintKit = 0;
 	int nFallbackSeed = 0;
 	int nFallbackStatTrak = -1;
@@ -12,6 +13,7 @@ struct EconomyItemCfg {
 };
 
 std::unordered_map<int, EconomyItemCfg> g_SkinChangerCfg;
+std::unordered_map<int, int> g_ViewModelCfg;
 
 inline void SetSkinConfig() {
 	// StatTrak™ AWP | Dragon Lore
@@ -36,4 +38,24 @@ inline void SetSkinConfig() {
 
 	// USP-S | Stainless
 	g_SkinChangerCfg[WEAPON_USP_SILENCER].nFallbackPaintKit = 277;
+
+	// Karambit | Fade (CT)
+	g_SkinChangerCfg[WEAPON_KNIFE].iItemDefinitionIndex = WEAPON_KNIFE_KARAMBIT;
+	g_SkinChangerCfg[WEAPON_KNIFE].nFallbackPaintKit = 38;
+	g_SkinChangerCfg[WEAPON_KNIFE].iEntityQuality = 3;
+
+	// M9 Bayonet | Crimson Web (T)
+	g_SkinChangerCfg[WEAPON_KNIFE_T].iItemDefinitionIndex = WEAPON_KNIFE_M9_BAYONET;
+	g_SkinChangerCfg[WEAPON_KNIFE_T].nFallbackPaintKit = 12;
+	g_SkinChangerCfg[WEAPON_KNIFE_T].iEntityQuality = 3;
+}
+
+inline void SetModelConfig() {
+	// Get the indexes of the models we want to replace.
+	int nOriginalKnifeCT = g_ModelInfo->GetModelIndex("models/weapons/v_knife_default_ct.mdl");
+	int nOriginalKnifeT = g_ModelInfo->GetModelIndex("models/weapons/v_knife_default_t.mdl");
+
+	// Configure model replacements.
+	g_ViewModelCfg[nOriginalKnifeCT] = g_ModelInfo->GetModelIndex("models/weapons/v_knife_karam.mdl");
+	g_ViewModelCfg[nOriginalKnifeT] = g_ModelInfo->GetModelIndex("models/weapons/v_knife_m9_bay.mdl");
 }

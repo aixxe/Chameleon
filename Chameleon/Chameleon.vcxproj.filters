@@ -42,6 +42,18 @@
     <ClInclude Include="SDK.h">
       <Filter>Header Files\Source SDK</Filter>
     </ClInclude>
+    <ClInclude Include="DataTable.h">
+      <Filter>Header Files\Source SDK\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientClass.h">
+      <Filter>Header Files\Source SDK\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="IBaseClientDLL.h">
+      <Filter>Header Files\Source SDK\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="IVModelInfoClient.h">
+      <Filter>Header Files\Source SDK\Classes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Chameleon.cpp">
