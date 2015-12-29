@@ -1,5 +1,6 @@
 *.vs
 *.opensdf
+*.opendb
 *.sdf
 *.vcxproj.user
 /Debug
