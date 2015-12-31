@@ -7,6 +7,7 @@
 #define m_Item						0x40
 #define m_iItemDefinitionIndex		0x1D0
 #define m_iItemIDHigh				0x1E8
+#define m_iAccountID				0x1F0
 #define m_iEntityQuality			0x1D4
 #define m_szCustomName				0x264
 #define m_OriginalOwnerXuidLow		0x4D68
@@ -49,6 +50,11 @@ class CBaseAttributableItem: IClientEntity {
 		inline int* GetItemIDHigh() {
 			// DT_BaseAttributableItem -> m_AttributeManager -> m_Item -> m_iItemIDHigh
 			return (int*)((DWORD)this + m_AttributeManager + m_Item + m_iItemIDHigh);
+		}
+
+		inline int* GetAccountID() {
+			// DT_BaseAttributableItem -> m_AttributeManager -> m_Item -> m_iAccountID
+			return (int*)((DWORD)this + m_AttributeManager + m_Item + m_iAccountID);
 		}
 	
 		inline int* GetEntityQuality() {

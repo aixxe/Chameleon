@@ -116,6 +116,9 @@ void __fastcall FrameStageNotifyThink(void* ecx, void* edx, ClientFrameStage_t S
 				continue;
 
 			ApplyCustomSkin(pWeapon);
+
+			// Fix up the account ID so StatTrak will display correctly.
+			*pWeapon->GetAccountID() = LocalPlayerInfo.m_nXuidLow;
 		}
 
 		break;
