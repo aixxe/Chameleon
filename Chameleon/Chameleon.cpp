@@ -1,3 +1,13 @@
+/*
+
+	Chameleon - basic skin & knife changer for Counter-Strike: Global Offensive.
+	Copyright (C) 2014 - 2015, Team SkyeNet. (www.skyenet.org)
+	
+	Contributors:
+		* aixxe <aixxe@skyenet.org>
+
+*/
+
 // Include the game classes.
 #include "SDK.h"
 
@@ -22,8 +32,18 @@ void SetViewModelIndex(const CRecvProxyData *pDataConst, void *pStruct, void *pO
 
 	// Check for a model replacement in the global table.
 	if (g_ViewModelCfg.find(pData->m_Value.m_Int) != g_ViewModelCfg.end()) {
-		// Replace the view model with the user defined value.
-		pData->m_Value.m_Int = g_ViewModelCfg[pData->m_Value.m_Int];
+		// Confirm that we are replacing our view model and not someone elses.
+		CBaseViewModel* pViewModel = (CBaseViewModel*)pStruct;
+
+		if (pViewModel) {
+			// Compare the owner entity of this view model to the local player entity.
+			IClientEntity* pLocal = g_EntityList->GetClientEntity(g_EngineClient->GetLocalPlayer());
+
+			if (pLocal == g_EntityList->GetClientEntityFromHandle(pViewModel->GetOwner())) {
+				// Replace the view model with the user defined value.
+				pData->m_Value.m_Int = g_ViewModelCfg[pData->m_Value.m_Int];
+			}
+		}
 	}
 
 	// Call original function with the modified data.

@@ -16,6 +16,8 @@
 #define m_flFallbackWear			0x4D78
 #define m_nFallbackStatTrak			0x4D7C
 
+#define m_hOwner					0x45CC
+
 class IClientEntity {
 	public:
 		inline BYTE GetLifeState() {
@@ -26,6 +28,14 @@ class IClientEntity {
 		inline UINT* GetWeapons() {
 			// DT_BasePlayer -> m_hMyWeapons
 			return (UINT*)((DWORD)this + m_hMyWeapons);
+		}
+};
+
+class CBaseViewModel: IClientEntity {
+	public:
+		inline DWORD GetOwner() {
+			// DT_PredictedViewModel -> m_hOwner
+			return *(DWORD*)((DWORD)this + m_hOwner);
 		}
 };
 
