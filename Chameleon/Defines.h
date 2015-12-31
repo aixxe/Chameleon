@@ -18,7 +18,7 @@ typedef struct player_info_s {
 		DWORD m_dwCustomFiles[4];
 		BYTE m_FilesDownloaded;
 	private:
-		BYTE __pad1[220];
+		int __pad1;
 } player_info_t;
 
 typedef void* (*CreateInterfaceFn)(const char* szInterface, int* pReturnCode);
