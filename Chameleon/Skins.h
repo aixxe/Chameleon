@@ -13,7 +13,7 @@ struct EconomyItemCfg {
 };
 
 std::unordered_map<int, EconomyItemCfg> g_SkinChangerCfg;
-std::unordered_map<int, int> g_ViewModelCfg;
+std::unordered_map<int, const char*> g_ViewModelCfg;
 
 inline void SetSkinConfig() {
 	// StatTrak™ AWP | Dragon Lore
@@ -56,6 +56,6 @@ inline void SetModelConfig() {
 	int nOriginalKnifeT = g_ModelInfo->GetModelIndex("models/weapons/v_knife_default_t.mdl");
 
 	// Configure model replacements.
-	g_ViewModelCfg[nOriginalKnifeCT] = g_ModelInfo->GetModelIndex("models/weapons/v_knife_karam.mdl");
-	g_ViewModelCfg[nOriginalKnifeT] = g_ModelInfo->GetModelIndex("models/weapons/v_knife_m9_bay.mdl");
+	g_ViewModelCfg[nOriginalKnifeCT] = "models/weapons/v_knife_karam.mdl";
+	g_ViewModelCfg[nOriginalKnifeT] = "models/weapons/v_knife_m9_bay.mdl";
 }

@@ -22,10 +22,7 @@ typedef void(__thiscall *FrameStageNotify)(void*, ClientFrameStage_t);
 FrameStageNotify fnOriginalFunction = NULL;
 
 // Function to apply skin data to weapons.
-inline bool ApplyCustomSkin(CBaseAttributableItem* pWeapon) {
-	// Get the weapons item definition index.
-	int nWeaponIndex = *pWeapon->GetItemDefinitionIndex();
-
+inline bool ApplyCustomSkin(CBaseAttributableItem* pWeapon, int nWeaponIndex) {
 	// Check if this weapon has a valid override defined.
 	if (g_SkinChangerCfg.find(nWeaponIndex) == g_SkinChangerCfg.end())
 		return false;
@@ -51,11 +48,42 @@ inline bool ApplyCustomSkin(CBaseAttributableItem* pWeapon) {
 	return true;
 }
 
+// Function to apply custom view models to weapons.
+inline bool ApplyCustomModel(CBasePlayer* pLocal, CBaseAttributableItem* pWeapon, int nWeaponIndex) {
+	// Get the view model of this weapon.
+	CBaseViewModel* pViewModel = pLocal->GetViewModel();
+	
+	if (!pViewModel)
+		return false;
+
+	// Get the weapon belonging to this view model.
+	DWORD hViewModelWeapon = pViewModel->GetWeapon();
+	CBaseAttributableItem* pViewModelWeapon = (CBaseAttributableItem*)g_EntityList->GetClientEntityFromHandle(hViewModelWeapon);
+
+	if (pViewModelWeapon != pWeapon)
+		return false;
+
+	// Check if an override exists for this view model.
+	int nViewModelIndex = pViewModel->GetModelIndex();
+
+	if (g_ViewModelCfg.find(nViewModelIndex) == g_ViewModelCfg.end())
+		return false;
+	
+	// Set the replacement model.
+	pViewModel->SetWeaponModel(g_ViewModelCfg[nViewModelIndex], pWeapon);
+	
+	return true;
+}
+
 void __fastcall FrameStageNotifyThink(void* ecx, void* edx, ClientFrameStage_t Stage) {
 	while (Stage == FRAME_NET_UPDATE_POSTDATAUPDATE_START) {
+		// Populate g_ViewModelCfg while in-game so IVModelInfoClient::GetModelIndex returns correctly.
+		if (g_ViewModelCfg.size() == 0)
+			SetModelConfig();
+
 		// Get our player entity.
 		int nLocalPlayerID = g_EngineClient->GetLocalPlayer();
-		IClientEntity* pLocal = g_EntityList->GetClientEntity(nLocalPlayerID);
+		CBasePlayer* pLocal = (CBasePlayer*)g_EntityList->GetClientEntity(nLocalPlayerID);
 
 		// Don't change anything if we're not alive.
 		if (!pLocal || pLocal->GetLifeState() != LIFE_ALIVE)
@@ -79,6 +107,11 @@ void __fastcall FrameStageNotifyThink(void* ecx, void* edx, ClientFrameStage_t S
 			if (!pWeapon)
 				continue;
 
+			// Get the weapons item definition index.
+			int nWeaponIndex = *pWeapon->GetItemDefinitionIndex();
+
+			ApplyCustomModel(pLocal, pWeapon, nWeaponIndex);
+
 			// Compare original owner XUIDs.
 			if (LocalPlayerInfo.m_nXuidLow != *pWeapon->GetOriginalOwnerXuidLow())
 				continue;
@@ -86,7 +119,7 @@ void __fastcall FrameStageNotifyThink(void* ecx, void* edx, ClientFrameStage_t S
 			if (LocalPlayerInfo.m_nXuidHigh != *pWeapon->GetOriginalOwnerXuidHigh())
 				continue;
 
-			ApplyCustomSkin(pWeapon);
+			ApplyCustomSkin(pWeapon, nWeaponIndex);
 
 			// Fix up the account ID so StatTrak will display correctly.
 			*pWeapon->GetAccountID() = LocalPlayerInfo.m_nXuidLow;
@@ -149,28 +182,16 @@ void Initialise() {
 			for (int nIndex = 0; nIndex < pClassTable->m_nProps; nIndex++) {
 				RecvProp* pProp = &pClassTable->m_pProps[nIndex];
 
-				if (!pProp)
+				if (!pProp || strcmp(pProp->m_pVarName, "m_nSequence"))
 					continue;
 
-				if (!strcmp(pProp->m_pVarName, "m_nModelIndex")) {
-					// Store the original proxy function.
-					fnModelIndexProxyFn = pProp->m_ProxyFn;
+				// Store the original proxy function.
+				fnSequenceProxyFn = pProp->m_ProxyFn;
 
-					// Replace the proxy function with our model changer.
-					pProp->m_ProxyFn = (RecvVarProxyFn)SetViewModelIndex;
+				// Replace the proxy function with our sequence changer.
+				pProp->m_ProxyFn = (RecvVarProxyFn)SetViewModelSequence;
 
-					continue;
-				}
-
-				if (!strcmp(pProp->m_pVarName, "m_nSequence")) {
-					// Store the original proxy function.
-					fnSequenceProxyFn = pProp->m_ProxyFn;
-
-					// Replace the proxy function with our sequence changer.
-					pProp->m_ProxyFn = (RecvVarProxyFn)SetViewModelSequence;
-
-					continue;
-				}
+				break;
 			}
 
 			break;

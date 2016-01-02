@@ -1,10 +1,14 @@
 #pragma once
 
-#define m_lifeState					0x25B
-#define m_hMyWeapons				0x49F8
+#define m_nIndex					0x64
 
 #define m_nModelIndex				0x254
 #define m_hOwner					0x45CC
+#define m_hWeapon					0x45C8
+
+#define m_lifeState					0x25B
+#define m_hMyWeapons				0x49F8
+#define m_hViewModel				0x4EFC
 
 #define m_AttributeManager			0x4980
 #define m_Item						0x40
@@ -22,6 +26,35 @@
 
 class IClientEntity {
 	public:
+		inline int GetIndex() {
+			return *(int*)((DWORD)this + m_nIndex);
+		}
+};
+
+class CBaseViewModel: public IClientEntity {
+	public:
+		inline int GetModelIndex() {
+			// DT_BaseViewModel -> m_nModelIndex
+			return *(int*)((DWORD)this + m_nModelIndex);
+		}
+
+		inline DWORD GetOwner() {
+			// DT_BaseViewModel -> m_hOwner
+			return *(PDWORD)((DWORD)this + m_hOwner);
+		}
+
+		inline DWORD GetWeapon() {
+			// DT_BaseViewModel -> m_hWeapon
+			return *(PDWORD)((DWORD)this + m_hWeapon);
+		}
+
+		inline void SetWeaponModel(const char* Filename, IClientEntity* Weapon) {
+			return CallVirtualFunction<void(__thiscall*)(void*, const char*, IClientEntity*)>(this, 241)(this, Filename, Weapon);
+		}
+};
+
+class CBasePlayer: public IClientEntity {
+	public:
 		inline BYTE GetLifeState() {
 			// DT_BasePlayer -> m_lifeState
 			return *(BYTE*)((DWORD)this + m_lifeState);
@@ -31,18 +64,10 @@ class IClientEntity {
 			// DT_BasePlayer -> m_hMyWeapons
 			return (UINT*)((DWORD)this + m_hMyWeapons);
 		}
-};
 
-class CBaseViewModel: public IClientEntity {
-	public:
-		inline int* GetModelIndex() {
-			// DT_BaseViewModel -> m_nModelIndex
-			return (int*)((DWORD)this + m_nModelIndex);
-		}
-
-		inline DWORD GetOwner() {
-			// DT_BaseViewModel -> m_hOwner
-			return *(PDWORD)((DWORD)this + m_hOwner);
+		inline CBaseViewModel* GetViewModel() {
+			// DT_BasePlayer -> m_hViewModel
+			return (CBaseViewModel*)g_EntityList->GetClientEntityFromHandle(*(PDWORD)(this + m_hViewModel));
 		}
 };
 
