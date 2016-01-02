@@ -54,6 +54,9 @@
     <ClInclude Include="IVModelInfoClient.h">
       <Filter>Header Files\Source SDK\Classes</Filter>
     </ClInclude>
+    <ClInclude Include="Proxies.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Chameleon.cpp">

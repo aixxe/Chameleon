@@ -3,6 +3,9 @@
 #define m_lifeState					0x25B
 #define m_hMyWeapons				0x49F8
 
+#define m_nModelIndex				0x254
+#define m_hOwner					0x45CC
+
 #define m_AttributeManager			0x4980
 #define m_Item						0x40
 #define m_iItemDefinitionIndex		0x1D0
@@ -17,8 +20,6 @@
 #define m_flFallbackWear			0x4D78
 #define m_nFallbackStatTrak			0x4D7C
 
-#define m_hOwner					0x45CC
-
 class IClientEntity {
 	public:
 		inline BYTE GetLifeState() {
@@ -32,15 +33,20 @@ class IClientEntity {
 		}
 };
 
-class CBaseViewModel: IClientEntity {
+class CBaseViewModel: public IClientEntity {
 	public:
+		inline int* GetModelIndex() {
+			// DT_BaseViewModel -> m_nModelIndex
+			return (int*)((DWORD)this + m_nModelIndex);
+		}
+
 		inline DWORD GetOwner() {
-			// DT_PredictedViewModel -> m_hOwner
-			return *(DWORD*)((DWORD)this + m_hOwner);
+			// DT_BaseViewModel -> m_hOwner
+			return *(PDWORD)((DWORD)this + m_hOwner);
 		}
 };
 
-class CBaseAttributableItem: IClientEntity {
+class CBaseAttributableItem: public IClientEntity {
 	public:
 		inline int* GetItemDefinitionIndex() {
 			// DT_BaseAttributableItem -> m_AttributeManager -> m_Item -> m_iItemDefinitionIndex

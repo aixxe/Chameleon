@@ -14,41 +14,12 @@
 // Include the user defined skins.
 #include "Skins.h"
 
+// Include the NetVar proxy functions.
+#include "Proxies.h"
+
 // Define the calling convention for the FrameStageNotify function.
 typedef void(__thiscall *FrameStageNotify)(void*, ClientFrameStage_t);
 FrameStageNotify fnOriginalFunction = NULL;
-
-// Store the original proxy function for the 'm_nModelIndex' property.
-RecvVarProxyFn fnOriginalProxyFn = NULL;
-
-// Function to change viewmodels.
-void SetViewModelIndex(const CRecvProxyData *pDataConst, void *pStruct, void *pOut) {
-	// Ensure the model replacements are available. (called here so GetModelIndex returns valid IDs)
-	if (g_ViewModelCfg.size() == 0)
-		SetModelConfig();
-
-	// Make the incoming data editable.
-	CRecvProxyData* pData = const_cast<CRecvProxyData*>(pDataConst);
-
-	// Check for a model replacement in the global table.
-	if (g_ViewModelCfg.find(pData->m_Value.m_Int) != g_ViewModelCfg.end()) {
-		// Confirm that we are replacing our view model and not someone elses.
-		CBaseViewModel* pViewModel = (CBaseViewModel*)pStruct;
-
-		if (pViewModel) {
-			// Compare the owner entity of this view model to the local player entity.
-			IClientEntity* pLocal = g_EntityList->GetClientEntity(g_EngineClient->GetLocalPlayer());
-
-			if (pLocal == g_EntityList->GetClientEntityFromHandle(pViewModel->GetOwner())) {
-				// Replace the view model with the user defined value.
-				pData->m_Value.m_Int = g_ViewModelCfg[pData->m_Value.m_Int];
-			}
-		}
-	}
-
-	// Call original function with the modified data.
-	fnOriginalProxyFn(pData, pStruct, pOut);
-}
 
 // Function to apply skin data to weapons.
 inline bool ApplyCustomSkin(CBaseAttributableItem* pWeapon) {
@@ -178,16 +149,28 @@ void Initialise() {
 			for (int nIndex = 0; nIndex < pClassTable->m_nProps; nIndex++) {
 				RecvProp* pProp = &pClassTable->m_pProps[nIndex];
 
-				if (!pProp || strcmp(pProp->m_pVarName, "m_nModelIndex"))
+				if (!pProp)
 					continue;
 
-				// Store the original proxy function.
-				fnOriginalProxyFn = pProp->m_ProxyFn;
+				if (!strcmp(pProp->m_pVarName, "m_nModelIndex")) {
+					// Store the original proxy function.
+					fnModelIndexProxyFn = pProp->m_ProxyFn;
 
-				// Replace the proxy function with our model changer.
-				pProp->m_ProxyFn = (RecvVarProxyFn)SetViewModelIndex;
+					// Replace the proxy function with our model changer.
+					pProp->m_ProxyFn = (RecvVarProxyFn)SetViewModelIndex;
 
-				break;
+					continue;
+				}
+
+				if (!strcmp(pProp->m_pVarName, "m_nSequence")) {
+					// Store the original proxy function.
+					fnSequenceProxyFn = pProp->m_ProxyFn;
+
+					// Replace the proxy function with our sequence changer.
+					pProp->m_ProxyFn = (RecvVarProxyFn)SetViewModelSequence;
+
+					continue;
+				}
 			}
 
 			break;
@@ -196,9 +179,8 @@ void Initialise() {
 }
 
 bool __stdcall DllMain(HINSTANCE hDLLInstance, DWORD dwReason, LPVOID lpReserved) {
-	if (dwReason == DLL_PROCESS_ATTACH) {
+	if (dwReason == DLL_PROCESS_ATTACH)
 		CreateThread(0, 0, (LPTHREAD_START_ROUTINE)Initialise, 0, 0, 0);
-	}
 
 	return true;
 }
