@@ -20,7 +20,7 @@ inline void SetSkinConfig() {
  
 inline void SetModelConfig() {
 	int nOriginalKnifeCT = g_ModelInfo->GetModelIndex("models/weapons/v_knife_default_ct.mdl");
-	g_ViewModelCfg[nOriginalKnifeCT] = g_ModelInfo->GetModelIndex("models/weapons/v_knife_karam.mdl");
+	g_ViewModelCfg[nOriginalKnifeCT] = "models/weapons/v_knife_karam.mdl";
 }
 ```
 
