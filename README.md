@@ -22,6 +22,12 @@ inline void SetModelConfig() {
 	int nOriginalKnifeCT = g_ModelInfo->GetModelIndex("models/weapons/v_knife_default_ct.mdl");
 	g_ViewModelCfg[nOriginalKnifeCT] = "models/weapons/v_knife_karam.mdl";
 }
+
+inline void SetKillIconCfg() {
+	// Define replacement kill icons. (these only apply to you)
+	g_KillIconCfg["knife_default_ct"] = "knife_karambit";
+	g_KillIconCfg["knife_t"] = "knife_m9_bayonet";
+}
 ```
 
 * Compile and inject into `csgo.exe` using your preferred injector.

@@ -22,11 +22,14 @@
     <Filter Include="Header Files\Source SDK\Classes">
       <UniqueIdentifier>{9cdf94f5-40a3-44f6-ade0-773138e9347f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Hooks">
+      <UniqueIdentifier>{4e0ec2c9-16f8-49d3-bf2c-ace50bf0bf31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Functions">
+      <UniqueIdentifier>{09f801b2-5fb0-4da3-97cd-1496c1bf2d66}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Skins.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Defines.h">
       <Filter>Header Files\Source SDK\Generic</Filter>
     </ClInclude>
@@ -57,10 +60,27 @@
     <ClInclude Include="Proxies.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Skins.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IGameEvents.h">
+      <Filter>Header Files\Source SDK\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="FireEventClientSide.h">
+      <Filter>Header Files\Hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="Functions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Chameleon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FrameStageNotify.h">
+      <Filter>Header Files\Hooks</Filter>
+    </None>
   </ItemGroup>
 </Project>

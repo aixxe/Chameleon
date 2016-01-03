@@ -14,6 +14,7 @@ struct EconomyItemCfg {
 
 std::unordered_map<int, EconomyItemCfg> g_SkinChangerCfg;
 std::unordered_map<int, const char*> g_ViewModelCfg;
+std::unordered_map<const char*, const char*> g_KillIconCfg;
 
 inline void SetSkinConfig() {
 	// StatTrak™ AWP | Dragon Lore
@@ -58,4 +59,10 @@ inline void SetModelConfig() {
 	// Configure model replacements.
 	g_ViewModelCfg[nOriginalKnifeCT] = "models/weapons/v_knife_karam.mdl";
 	g_ViewModelCfg[nOriginalKnifeT] = "models/weapons/v_knife_m9_bay.mdl";
+}
+
+inline void SetKillIconCfg() {
+	// Define replacement kill icons. (these only apply to you)
+	g_KillIconCfg["knife_default_ct"] = "knife_karambit";
+	g_KillIconCfg["knife_t"] = "knife_m9_bayonet";
 }
