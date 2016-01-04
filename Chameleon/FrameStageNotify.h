@@ -6,10 +6,6 @@ FrameStageNotify fnOriginalFrameStageNotify = NULL;
 
 void __fastcall FrameStageNotifyThink(void* ecx, void* edx, ClientFrameStage_t Stage) {
 	while (Stage == FRAME_NET_UPDATE_POSTDATAUPDATE_START) {
-		// Populate g_ViewModelCfg while in-game so IVModelInfoClient::GetModelIndex returns correctly.
-		if (g_ViewModelCfg.size() == 0)
-			SetModelConfig();
-
 		// Get our player entity.
 		int nLocalPlayerID = g_EngineClient->GetLocalPlayer();
 		CBasePlayer* pLocal = (CBasePlayer*)g_EntityList->GetClientEntity(nLocalPlayerID);
