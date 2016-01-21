@@ -3,26 +3,26 @@
 #define m_nIndex					0x64
 
 #define m_nModelIndex				0x254
-#define m_hOwner					0x45CC
-#define m_hWeapon					0x45C8
+#define m_hWeapon					0x29B8
+#define m_hOwner					0x29BC
 
 #define m_lifeState					0x25B
-#define m_hMyWeapons				0x49F8
-#define m_hViewModel				0x4EFC
+#define m_hMyWeapons				0x2DE8
+#define m_hViewModel				0x32EC
 
-#define m_AttributeManager			0x4980
+#define m_AttributeManager			0x2D70
 #define m_Item						0x40
 #define m_iItemDefinitionIndex		0x1D0
 #define m_iItemIDHigh				0x1E8
 #define m_iAccountID				0x1F0
 #define m_iEntityQuality			0x1D4
 #define m_szCustomName				0x264
-#define m_OriginalOwnerXuidLow		0x4D68
-#define m_OriginalOwnerXuidHigh		0x4D6C
-#define m_nFallbackPaintKit			0x4D70
-#define m_nFallbackSeed				0x4D74
-#define m_flFallbackWear			0x4D78
-#define m_nFallbackStatTrak			0x4D7C
+#define m_OriginalOwnerXuidLow		0x3158
+#define m_OriginalOwnerXuidHigh		0x315C
+#define m_nFallbackPaintKit			0x3160
+#define m_nFallbackSeed				0x3164
+#define m_flFallbackWear			0x3168
+#define m_nFallbackStatTrak			0x316C
 
 class IClientEntity {
 	public:
@@ -49,7 +49,7 @@ class CBaseViewModel: public IClientEntity {
 		}
 
 		inline void SetWeaponModel(const char* Filename, IClientEntity* Weapon) {
-			return CallVirtualFunction<void(__thiscall*)(void*, const char*, IClientEntity*)>(this, 241)(this, Filename, Weapon);
+			return CallVirtualFunction<void(__thiscall*)(void*, const char*, IClientEntity*)>(this, 242)(this, Filename, Weapon);
 		}
 };
 
