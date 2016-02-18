@@ -46,7 +46,7 @@ inline void SetSkinConfig() {
 	g_SkinChangerCfg[WEAPON_KNIFE].iEntityQuality = 3;
 
 	// Bowie Knife | Crimson Web (T)
-	g_SkinChangerCfg[WEAPON_KNIFE_T].iItemDefinitionIndex = WEAPON_KNIFE_BOWIE;
+	g_SkinChangerCfg[WEAPON_KNIFE_T].iItemDefinitionIndex = WEAPON_KNIFE_SURVIVAL_BOWIE;
 	g_SkinChangerCfg[WEAPON_KNIFE_T].nFallbackPaintKit = 12;
 	g_SkinChangerCfg[WEAPON_KNIFE_T].iEntityQuality = 3;
 }
