@@ -45,8 +45,8 @@ inline void SetSkinConfig() {
 	g_SkinChangerCfg[WEAPON_KNIFE].nFallbackPaintKit = 38;
 	g_SkinChangerCfg[WEAPON_KNIFE].iEntityQuality = 3;
 
-	// M9 Bayonet | Crimson Web (T)
-	g_SkinChangerCfg[WEAPON_KNIFE_T].iItemDefinitionIndex = WEAPON_KNIFE_M9_BAYONET;
+	// Bowie Knife | Crimson Web (T)
+	g_SkinChangerCfg[WEAPON_KNIFE_T].iItemDefinitionIndex = WEAPON_KNIFE_BOWIE;
 	g_SkinChangerCfg[WEAPON_KNIFE_T].nFallbackPaintKit = 12;
 	g_SkinChangerCfg[WEAPON_KNIFE_T].iEntityQuality = 3;
 }
@@ -58,11 +58,11 @@ inline void SetModelConfig() {
 
 	// Configure model replacements.
 	g_ViewModelCfg[nOriginalKnifeCT] = "models/weapons/v_knife_karam.mdl";
-	g_ViewModelCfg[nOriginalKnifeT] = "models/weapons/v_knife_m9_bay.mdl";
+	g_ViewModelCfg[nOriginalKnifeT] = "models/weapons/v_knife_survival_bowie.mdl";
 }
 
 inline void SetKillIconCfg() {
 	// Define replacement kill icons. (these only apply to you)
 	g_KillIconCfg["knife_default_ct"] = "knife_karambit";
-	g_KillIconCfg["knife_t"] = "knife_m9_bayonet";
+	g_KillIconCfg["knife_t"] = "knife_survival_bowie";
 }

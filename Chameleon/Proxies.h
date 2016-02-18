@@ -68,6 +68,17 @@ void SetViewModelSequence(const CRecvProxyData *pDataConst, void *pStruct, void 
 					default:
 						m_nSequence += 2;
 				}
+			} else if (!strcmp(szModel, "models/weapons/v_knife_survival_bowie.mdl")) {
+				// Fix animations for the Bowie Knife.
+				switch (m_nSequence) {
+					case SEQUENCE_DEFAULT_DRAW:
+					case SEQUENCE_DEFAULT_IDLE1:
+						break;
+					case SEQUENCE_DEFAULT_IDLE2:
+						m_nSequence = SEQUENCE_BOWIE_IDLE1; break;
+					default:
+						m_nSequence--;
+				}
 			}
 
 			// Set the fixed sequence.
