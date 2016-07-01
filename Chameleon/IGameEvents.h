@@ -15,7 +15,7 @@ class IGameEvent {
 		}
 
 		void SetString(const char* szKeyName, const char* szValue) {
-			return CallVirtualFunction<void(__thiscall *)(void*, const char*, const char*)>(this, 15)(this, szKeyName, szValue);
+			return CallVirtualFunction<void(__thiscall *)(void*, const char*, const char*)>(this, 16)(this, szKeyName, szValue);
 		}
 };
 
