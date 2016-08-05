@@ -45,7 +45,7 @@ void Initialise() {
 	// Call "CreateInterface" to get the required class pointers.
 	g_BaseClient = (IBaseClientDLL*)fnClientFactory("VClient017", NULL); 
 	g_EntityList = (IClientEntityList*)fnClientFactory("VClientEntityList003", NULL);
-	g_EngineClient = (IVEngineClient*)fnEngineFactory("VEngineClient013", NULL);
+	g_EngineClient = (IVEngineClient*)fnEngineFactory("VEngineClient014", NULL);
 	g_ModelInfo = (IVModelInfoClient*)fnEngineFactory("VModelInfoClient004", NULL);
 	g_GameEventMgr = (IGameEventManager2*)fnEngineFactory("GAMEEVENTSMANAGER002", NULL);
 	
