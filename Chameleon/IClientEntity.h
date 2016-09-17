@@ -8,7 +8,7 @@
 
 #define m_lifeState					0x25B
 #define m_hMyWeapons				0x2DE8
-#define m_hViewModel				0x32F0
+#define m_hViewModel				0x32F8
 
 #define m_AttributeManager			0x2D70
 #define m_Item						0x40
