@@ -17,12 +17,12 @@
 #define m_iAccountID				0x1F8
 #define m_iEntityQuality			0x1DC
 #define m_szCustomName				0x26C
-#define m_OriginalOwnerXuidLow		0x3160
-#define m_OriginalOwnerXuidHigh		0x3164
-#define m_nFallbackPaintKit			0x3168
-#define m_nFallbackSeed				0x316C
-#define m_flFallbackWear			0x3170
-#define m_nFallbackStatTrak			0x3174
+#define m_OriginalOwnerXuidLow		0x3168
+#define m_OriginalOwnerXuidHigh		0x316C
+#define m_nFallbackPaintKit			0x3170
+#define m_nFallbackSeed				0x3174
+#define m_flFallbackWear			0x3178
+#define m_nFallbackStatTrak			0x317C
 
 class IClientEntity {
 	public:
