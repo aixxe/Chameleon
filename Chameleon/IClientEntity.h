@@ -49,7 +49,7 @@ class CBaseViewModel: public IClientEntity {
 		}
 
 		inline void SetWeaponModel(const char* Filename, IClientEntity* Weapon) {
-			return CallVirtualFunction<void(__thiscall*)(void*, const char*, IClientEntity*)>(this, 242)(this, Filename, Weapon);
+			return GetVirtualFunction<void(__thiscall*)(void*, const char*, IClientEntity*)>(this, 242)(this, Filename, Weapon);
 		}
 };
 

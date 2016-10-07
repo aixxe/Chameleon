@@ -54,7 +54,7 @@ typedef struct player_info_s {
 
 typedef void* (*CreateInterfaceFn)(const char* szInterface, int* pReturnCode);
 
-template <typename Fn> __forceinline Fn CallVirtualFunction(void* pClassBase, int nFunctionIndex) {
+template <typename Fn> __forceinline Fn GetVirtualFunction(void* pClassBase, int nFunctionIndex) {
 	return (Fn)((PDWORD)*(PDWORD*)pClassBase)[nFunctionIndex];
 }
 
