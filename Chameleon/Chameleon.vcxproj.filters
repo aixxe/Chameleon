@@ -25,9 +25,6 @@
     <Filter Include="Header Files\Hooks">
       <UniqueIdentifier>{4e0ec2c9-16f8-49d3-bf2c-ace50bf0bf31}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Functions">
-      <UniqueIdentifier>{09f801b2-5fb0-4da3-97cd-1496c1bf2d66}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Defines.h">
