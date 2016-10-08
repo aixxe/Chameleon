@@ -79,11 +79,11 @@ void Initialise() {
 	pNewClientDLLVMT[36] = (DWORD)FrameStageNotifyThink;
 	
 	// Change the FireEventClientSide function in the new table to point to our function.
-	pNewGameEventMgrVMT[8] = (DWORD)FireEventClientSideThink;
+	pNewGameEventMgrVMT[9] = (DWORD)FireEventClientSideThink;
 
 	// Backup the original function from the untouched tables.
 	fnOriginalFrameStageNotify = (FrameStageNotify)pOriginalClientDLLVMT[36];
-	fnOriginalFireEventClientSide = (FireEventClientSide)pOriginalGameEventMgrVMT[8];
+	fnOriginalFireEventClientSide = (FireEventClientSide)pOriginalGameEventMgrVMT[9];
 
 	// Write the virtual method tables.
 	*pClientDLLVMT = pNewClientDLLVMT;
