@@ -17,7 +17,7 @@ bool __fastcall FireEventClientSideThink(void* ecx, void* edx, IGameEvent* pEven
 		ApplyCustomKillIcon(pEvent);
 
 	// Update model indexes when switching servers.
-	if (!strcmp(szEventName, "player_connect")) {
+	if (!strcmp(szEventName, "game_newmap")) {
 		// Clear existing values.
 		if (g_ViewModelCfg.size() >= 1)
 			g_ViewModelCfg.clear();
