@@ -38,6 +38,11 @@ class CBaseViewModel: public IClientEntity {
 			return *(int*)((DWORD)this + m_nModelIndex);
 		}
 
+		inline void SetModelIndex(int nModelIndex) {
+			// DT_BaseViewModel -> m_nModelIndex
+			*(int*)((DWORD)this + m_nModelIndex) = nModelIndex;
+		}
+
 		inline DWORD GetOwner() {
 			// DT_BaseViewModel -> m_hOwner
 			return *(PDWORD)((DWORD)this + m_hOwner);
@@ -46,10 +51,6 @@ class CBaseViewModel: public IClientEntity {
 		inline DWORD GetWeapon() {
 			// DT_BaseViewModel -> m_hWeapon
 			return *(PDWORD)((DWORD)this + m_hWeapon);
-		}
-
-		inline void SetWeaponModel(const char* Filename, IClientEntity* Weapon) {
-			return GetVirtualFunction<void(__thiscall*)(void*, const char*, IClientEntity*)>(this, 242)(this, Filename, Weapon);
 		}
 };
 

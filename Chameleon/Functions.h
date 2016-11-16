@@ -49,7 +49,7 @@ inline bool ApplyCustomModel(CBasePlayer* pLocal, CBaseAttributableItem* pWeapon
 		return false;
 
 	// Set the replacement model.
-	pViewModel->SetWeaponModel(g_ViewModelCfg[nViewModelIndex], pWeapon);
+	pViewModel->SetModelIndex(g_ModelInfo->GetModelIndex(g_ViewModelCfg[nViewModelIndex]));
 
 	return true;
 }
