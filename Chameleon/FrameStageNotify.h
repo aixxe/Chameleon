@@ -35,7 +35,11 @@ void __fastcall FrameStageNotifyThink(void* ecx, void* edx, ClientFrameStage_t S
 			// Get the weapons item definition index.
 			int nWeaponIndex = *pWeapon->GetItemDefinitionIndex();
 
-			ApplyCustomModel(pLocal, pWeapon, nWeaponIndex);
+			// Set the replacement model on the weapon (to get around the 29 Nov 2016 update check)
+			if (g_ViewModelCfg.find(pWeapon->GetModelIndex()) != g_ViewModelCfg.end())
+				pWeapon->SetModelIndex(g_ModelInfo->GetModelIndex(g_ViewModelCfg[pWeapon->GetModelIndex()]));
+			
+			ApplyCustomModel(pLocal, pWeapon);
 
 			// Compare original owner XUIDs.
 			if (LocalPlayerInfo.m_nXuidLow != *pWeapon->GetOriginalOwnerXuidLow())

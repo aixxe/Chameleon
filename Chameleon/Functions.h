@@ -28,7 +28,7 @@ inline bool ApplyCustomSkin(CBaseAttributableItem* pWeapon, int nWeaponIndex) {
 }
 
 // Function to apply custom view models to weapons.
-inline bool ApplyCustomModel(CBasePlayer* pLocal, CBaseAttributableItem* pWeapon, int nWeaponIndex) {
+inline bool ApplyCustomModel(CBasePlayer* pLocal, CBaseAttributableItem* pWeapon) {
 	// Get the view model of this weapon.
 	CBaseViewModel* pViewModel = pLocal->GetViewModel();
 

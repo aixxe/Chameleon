@@ -31,18 +31,21 @@ class IClientEntity {
 		}
 };
 
-class CBaseViewModel: public IClientEntity {
+class CBaseEntity: public IClientEntity {
 	public:
 		inline int GetModelIndex() {
-			// DT_BaseViewModel -> m_nModelIndex
+			// DT_BaseEntity -> m_nModelIndex
 			return *(int*)((DWORD)this + m_nModelIndex);
 		}
-
+		
 		inline void SetModelIndex(int nModelIndex) {
-			// DT_BaseViewModel -> m_nModelIndex
+			// DT_BaseEntity -> m_nModelIndex
 			*(int*)((DWORD)this + m_nModelIndex) = nModelIndex;
 		}
+};
 
+class CBaseViewModel: public CBaseEntity {
+	public:
 		inline DWORD GetOwner() {
 			// DT_BaseViewModel -> m_hOwner
 			return *(PDWORD)((DWORD)this + m_hOwner);
@@ -54,7 +57,7 @@ class CBaseViewModel: public IClientEntity {
 		}
 };
 
-class CBasePlayer: public IClientEntity {
+class CBasePlayer: public CBaseEntity {
 	public:
 		inline BYTE GetLifeState() {
 			// DT_BasePlayer -> m_lifeState
@@ -72,7 +75,7 @@ class CBasePlayer: public IClientEntity {
 		}
 };
 
-class CBaseAttributableItem: public IClientEntity {
+class CBaseAttributableItem: public CBaseEntity {
 	public:
 		inline int* GetItemDefinitionIndex() {
 			// DT_BaseAttributableItem -> m_AttributeManager -> m_Item -> m_iItemDefinitionIndex
